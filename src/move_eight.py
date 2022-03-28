@@ -60,7 +60,7 @@ class Square:
         self.sub = rospy.Subscriber("odom", Odometry, self.callback_function)
 
         rospy.init_node(node_name, anonymous=True)
-        self.rate = rospy.Rate(1) # hz
+        self.rate = rospy.Rate(10) # hz
 
         # define the robot pose variables and set them all to zero to start with:
         # variables to use for the "current position":
@@ -93,7 +93,7 @@ class Square:
         # you could use this to print the current velocity command:
         print(f"current velocity: lin.x = {self.vel.linear.x:.1f}, ang.z = {self.vel.angular.z:.1f}")
         # you could also print the current odometry to the terminal here, if you wanted to:
-        print(f"current odometry: x = {self.x:.2f}, y = {self.y:.2f}, yaw = {self.theta_z:.2f}")
+        print(f"current odometry: x = {self.x:.3f}, y = {self.y:.3f}, theta_z = {self.theta_z:.3f}")
     
     
     def main_loop(self):
@@ -106,13 +106,14 @@ class Square:
             # here is where your code would go to control the motion of your 
             # robot. Add code here to make your robot move in a square of
             # dimensions 0.5x0.5m...
-            print(f"{status} and {self.theta_z} and {self.theta_z0}")
+
+            print(f"{status} and {self.theta_z} and {self.theta_z0} and {wait}")
 
             if self.startup:
                 self.vel = Twist()
                 status = "init"     
             elif self.turn:
-               if abs(self.theta_z) <= 0.03 and wait > 10:
+               if abs(self.theta_z) <= 0.1 and wait > 30:
                     self.vel = Twist()
                     self.turn = False #Turn Right
                     wait = 0
@@ -121,25 +122,21 @@ class Square:
                     self.theta_z = self.theta_z0
                else:
                     self.vel = Twist()
-                    self.vel.linear.x = 0.5
-                    self.vel.angular.z = 1 / diameter
+                    self.vel.linear.x = 0.12
+                    self.vel.angular.z = 0.24 / diameter
                     wait += 1
                     status = "running left"
             else:
-                if abs(self.theta_z) <= 0.03 and wait > 10:
+                if abs(self.theta_z) >= 0.035 or wait < 20:
                     self.vel = Twist()
-                    self.run = True #Turn Left
-                    wait = 0
-                    self.x0 = self.x
-                    self.y0 = self.y  
-                    self.theta_z = self.theta_z0
+                    self.vel.linear.x = 0.12
+                    self.vel.angular.z = - 0.24 / diameter
+                    wait += 1
+                    status = "running right"    
                 else:
                     self.vel = Twist()
-                    self.vel.linear.x = 0.5
-                    self.vel.angular.z = - 1 / diameter
-                    wait += 1
-                    status = "running right"      
-            
+                    
+
             # publish whatever velocity command has been set in your code above:
             self.pub.publish(self.vel)
             # maintain the loop rate @ 10 hz

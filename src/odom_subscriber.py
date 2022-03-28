@@ -14,7 +14,7 @@ class Subscriber():
                      odom_data.pose.pose.orientation.y, odom_data.pose.pose.orientation.z, 
                      odom_data.pose.pose.orientation.w], 
                      'sxyz')
-        print(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
+        # print(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
 
     def __init__(self):
         self.node_name = "sub_subscriber"
