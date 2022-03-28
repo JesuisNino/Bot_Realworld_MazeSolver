@@ -7,9 +7,6 @@ from tf.transformations import euler_from_quaternion
 
 class Subscriber():
 
-    # def callback(self, topic_message):
-    #     print(f"The '{self.node_name}' node obtained the following message: '{topic_message.data}'")
-
     def callback_function(self, odom_data):
         linear_x = odom_data.pose.pose.position.x
         linear_y = odom_data.pose.pose.position.y
@@ -17,10 +14,10 @@ class Subscriber():
                      odom_data.pose.pose.orientation.y, odom_data.pose.pose.orientation.z, 
                      odom_data.pose.pose.orientation.w], 
                      'sxyz')
-        print(f"x = {linear_x:.2f}, y = {linear_y:.3f}, theta_z = {yaw:.3f}")
+        print(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
 
     def __init__(self):
-        self.node_name = "simple_subscriber"
+        self.node_name = "sub_subscriber"
         topic_name = "odom"
         
         rospy.init_node(self.node_name, anonymous=True)
