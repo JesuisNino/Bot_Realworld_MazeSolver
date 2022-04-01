@@ -1,4 +1,4 @@
 <launch>
-  <node pkg="team47" type="move_eight.py" name="pub_node"  output="screen" />
-  <node pkg="team47" type="odom_subscriber.py" name="sub_node"  output="screen" />
+  <node pkg="team47_assignment2" type="move_eight.py" name="pub_node"  output="screen" />
+  <node pkg="team47_assignment2" type="odom_subscriber.py" name="sub_node"  output="screen" />
 </launch>
