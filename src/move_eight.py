@@ -98,7 +98,6 @@ class Square:
     
     def main_loop(self):
         status = ""
-        T = 0
         diameter = 1
         wait = 0
         
@@ -107,7 +106,7 @@ class Square:
             # robot. Add code here to make your robot move in a square of
             # dimensions 0.5x0.5m...
 
-            print(f"{status} and {self.theta_z} and {self.theta_z0} and {wait}")
+            #print(f"{status} and {self.theta_z} and {self.theta_z0} and {wait}")
 
             if self.startup:
                 self.vel = Twist()

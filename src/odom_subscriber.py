@@ -14,12 +14,26 @@ class Subscriber():
                      odom_data.pose.pose.orientation.y, odom_data.pose.pose.orientation.z, 
                      odom_data.pose.pose.orientation.w], 
                      'sxyz')
-        # print(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
+
+        StartTime = rospy.get_rostime()
+
+      
+
+        if self.wait == 10:
+           rospy.loginfo(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
+           self.wait = 0
+        else:
+            self.wait += 1
+
+        # if (rospy.get_rostime().secs - StartTime.secs) == 1:
+        #     StartTime.secs=rospy.get_rostime().secs
+        #     rospy.loginfo(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
 
     def __init__(self):
         self.node_name = "sub_subscriber"
         topic_name = "odom"
-        
+        self.wait = 0
+
         rospy.init_node(self.node_name, anonymous=True)
         self.sub = rospy.Subscriber(topic_name, Odometry, self.callback_function)
         rospy.loginfo(f"The '{self.node_name}' node is active...")
