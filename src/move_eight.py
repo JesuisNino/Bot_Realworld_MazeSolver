@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# a template for the move_square exercise
 
 from os import stat
 from this import d
@@ -13,7 +12,7 @@ from tf.transformations import euler_from_quaternion
 # import some useful mathematical operations (and pi), which you may find useful:
 from math import sqrt, pow, pi
 
-class Square:
+class MoveEight:
     
     def callback_function(self, odom_data):
         # obtain the orientation co-ords:
@@ -29,9 +28,6 @@ class Square:
         # convert orientation co-ords to roll, pitch & yaw (theta_x, theta_y, theta_z):
         (roll, pitch, yaw) = euler_from_quaternion([or_x, or_y, or_z, or_w], 'sxyz')
         
-        # We are only interested in the x, y and theta_z odometry data for this
-        # robot, so we only assign these to class variables (so that we can 
-        # access them elsewhere within our Square() class):
         self.x = pos_x
         self.y = pos_y
         self.theta_z = yaw 
@@ -48,7 +44,7 @@ class Square:
             self.theta_z0 = self.theta_z
 
     def __init__(self):
-        node_name = "move_square"
+        node_name = "move_eight"
         # a flag if this node has just been launched
         self.startup = True
 
@@ -106,13 +102,11 @@ class Square:
             # robot. Add code here to make your robot move in a square of
             # dimensions 0.5x0.5m...
 
-            #print(f"{status} and {self.theta_z} and {self.theta_z0} and {wait}")
-
             if self.startup:
                 self.vel = Twist()
                 status = "init"     
             elif self.turn:
-               if abs(self.theta_z) <= 0.1 and wait > 30:
+               if abs(self.theta_z) <= 1.52 and wait > 260:
                     self.vel = Twist()
                     self.turn = False #Turn Right
                     wait = 0
@@ -126,7 +120,7 @@ class Square:
                     wait += 1
                     status = "running left"
             else:
-                if abs(self.theta_z) >= 0.035 or wait < 20:
+                if abs(self.theta_z) >= 0.015 and wait < 268:
                     self.vel = Twist()
                     self.vel.linear.x = 0.12
                     self.vel.angular.z = - 0.24 / diameter
@@ -142,8 +136,8 @@ class Square:
             self.rate.sleep()
 
 if __name__ == '__main__':
-    movesquare_instance = Square()
+    moveeight_instance = MoveEight()
     try:
-        movesquare_instance.main_loop()
+        moveeight_instance.main_loop()
     except rospy.ROSInterruptException:
         pass
