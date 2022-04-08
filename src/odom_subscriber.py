@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# A simple ROS subscriber node in Python
+# ROS subscriber node for task 1
 
 import rospy
 from nav_msgs.msg import Odometry
@@ -17,17 +17,12 @@ class Subscriber():
 
         StartTime = rospy.get_rostime()
 
-      
-
+        #Print output messages at a rate of 1Hz
         if self.wait == 10:
            rospy.loginfo(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
            self.wait = 0
         else:
             self.wait += 1
-
-        # if (rospy.get_rostime().secs - StartTime.secs) == 1:
-        #     StartTime.secs=rospy.get_rostime().secs
-        #     rospy.loginfo(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
 
     def __init__(self):
         self.node_name = "sub_subscriber"

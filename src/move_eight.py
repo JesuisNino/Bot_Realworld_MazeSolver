@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Task 1 program to move the robot in the shape of an eight
 
 from os import stat
 from this import d
@@ -9,7 +10,7 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 # import the function to convert orientation from quaternions to angles:
 from tf.transformations import euler_from_quaternion
-# import some useful mathematical operations (and pi), which you may find useful:
+# import some useful mathematical operations (and pi)
 from math import sqrt, pow, pi
 
 class MoveEight:
@@ -91,22 +92,18 @@ class MoveEight:
         # you could also print the current odometry to the terminal here, if you wanted to:
         print(f"current odometry: x = {self.x:.3f}, y = {self.y:.3f}, theta_z = {self.theta_z:.3f}")
     
-    
     def main_loop(self):
         status = ""
         diameter = 1
         wait = 0
         
         while not self.ctrl_c:
-            # here is where your code would go to control the motion of your 
-            # robot. Add code here to make your robot move in a square of
-            # dimensions 0.5x0.5m...
-
+            
             if self.startup:
                 self.vel = Twist()
                 status = "init"     
             elif self.turn:
-               if abs(self.theta_z) <= 1.52 and wait > 260:
+               if abs(self.theta_z) <= 1.52 and wait > 260:  #code to reset the robot for the second loop
                     self.vel = Twist()
                     self.turn = False #Turn Right
                     wait = 0
@@ -114,13 +111,13 @@ class MoveEight:
                     self.y0 = self.y  
                     self.theta_z = self.theta_z0
                else:
-                    self.vel = Twist()
+                    self.vel = Twist()  #code for the movement of the first loop
                     self.vel.linear.x = 0.12
                     self.vel.angular.z = 0.24 / diameter
                     wait += 1
                     status = "running left"
             else:
-                if abs(self.theta_z) >= 0.015 and wait < 268:
+                if abs(self.theta_z) >= 0.015 and wait < 268:  #code for the movement of the second loop
                     self.vel = Twist()
                     self.vel.linear.x = 0.12
                     self.vel.angular.z = - 0.24 / diameter
