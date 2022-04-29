@@ -22,7 +22,7 @@ class Subscriber():
            rospy.loginfo(f"x = {linear_x:.2f} [m], y = {linear_y:.2f} [m], yaw = {yaw:.2f} [degrees]")
            self.wait = 0
         else:
-            self.wait += 1
+           self.wait += 1
 
     def __init__(self):
         self.node_name = "sub_subscriber"
