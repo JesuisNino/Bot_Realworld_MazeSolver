@@ -19,7 +19,7 @@ class Subscriber():
 
         #Print output messages at a rate of 1Hz
         if self.wait == 10:
-           rospy.loginfo(f"x = {linear_x:.2f}, y = {linear_y:.2f}, yaw = {yaw:.2f}")
+           rospy.loginfo(f"x = {linear_x:.2f} [m], y = {linear_y:.2f} [m], yaw = {yaw:.2f} [degrees]")
            self.wait = 0
         else:
             self.wait += 1
