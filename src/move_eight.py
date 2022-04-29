@@ -103,7 +103,7 @@ class MoveEight:
                 self.vel = Twist()
                 status = "init"     
             elif self.turn:
-               if abs(self.theta_z) <= 1.25 and wait > 260:  #code to reset the robot for the second loop
+               if abs(self.theta_z) <= 1 and wait > 270: #code to reset the robot for the second loop
                     self.vel = Twist()
                     self.turn = False #Turn Right
                     wait = 0
