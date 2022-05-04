@@ -80,12 +80,12 @@ class SearchActionServer(object):
             self.feedback.current_distance_travelled = self.distance
             self.actionserver.publish_feedback(self.feedback)
 
-        # turn away while... here
+        # turn away when meet a collision
         print("Collision found, turning away...")
         if self.tb3_lidar.closest_object_position > 0:
-            self.vel_controller.set_move_cmd(0, 1.3)
+            self.vel_controller.set_move_cmd(0, 1.8)
         else:
-            self.vel_controller.set_move_cmd(0, -1.3)
+            self.vel_controller.set_move_cmd(0, -1.8)
 
         # could be infinite turn? do max 180*?
         while self.tb3_lidar.min_distance < goal.approach_distance:
@@ -94,7 +94,7 @@ class SearchActionServer(object):
         self.vel_controller.stop()
 
         if success:
-            # rospy.loginfo("approach completed sucessfully.")
+            rospy.loginfo("approach completed sucessfully.")
             self.result.total_distance_travelled = self.distance
             self.result.closest_object_distance = self.tb3_lidar.min_distance
             self.result.closest_object_angle = self.tb3_lidar.closest_object_position
