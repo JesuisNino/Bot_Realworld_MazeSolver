@@ -1,4 +1,4 @@
 <launch>
-  <node pkg="team47" type="maze_server.py" name="maze_action_server"  output="screen" />
-  <node pkg="team47" type="maze_client.py" name="maze_action_client"  output="screen" />
+  <node pkg="team47" type="maze_server.py" name="maze_nav"  output="screen" />
+  <!-- <node pkg="team47" type="maze_client.py" name="maze_action_client"  output="screen" /> -->
 </launch>
