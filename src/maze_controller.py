@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 import rospy
 from math import radians, degrees, sqrt
 from std_msgs.msg import String
