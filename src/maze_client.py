@@ -86,27 +86,8 @@ class action_client(object):
     def main(self):
         while not self.ctrl_c:
             self.send_goal(velocity = 0.2, approach = 0.5)
-            prempt = False
-            while self.client.get_state() < 2:
-                if self.distance >= self.STEPS[self.step]:
-                    rospy.logwarn("Traversed "+ str(self.STEPS[self.step]) + " metres, turning randomly")
-                    self.client.cancel_goal()
-                    random_angle = np.random.uniform(-0.5*pi, 0.5*pi)
-                    self.turn_rads(random_angle)
-                    prempt = True
-                    break
-
-                self.rate.sleep()
             
-            self.action_complete = True
-            if prempt:
-                self.step += 1
-                if self.step == 4:
-                    self.step = 0
-            else:
-                result = self.client.get_result()
-                print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
-                        f"at a location of {result.closest_object_angle:.3f} degrees")
+            
 
             self.vel_controller.stop()   
 

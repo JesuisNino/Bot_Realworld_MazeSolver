@@ -91,8 +91,11 @@ class action_client(object):
                 if self.distance >= self.STEPS[self.step]:
                     rospy.logwarn("Traversed "+ str(self.STEPS[self.step]) + " metres, turning randomly")
                     self.client.cancel_goal()
-                    random_degree = np.random.uniform(0,360)
-                    self.turn_left(random_degree)
+                    random_degree = np.random.uniform(-90,90)
+                    if random_degree < 0:
+                        self.turn_right(random_degree)
+                    else:
+                        self.turn_left(random_degree)
                     prempt = True
                     break
 
