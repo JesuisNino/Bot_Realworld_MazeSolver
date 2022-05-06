@@ -23,12 +23,11 @@ class action_client(object):
             self.i = 0
             # print(f"FEEDBACK: Currently travelled {self.distance:.3f} m")
 
-    def turn_rads(self, angle):
+        
+    def turn_left(self, degree):
         turn_velocity = 1.3
-        print("Attempting to turn at angle: " + str(angle) +"rads, / " + str(angle * 180/pi) + " degrees")
-        if angle > 0:
-            turn_velocity = -turn_velocity
-            angle = abs(angle)
+        angle = degree * pi / 180
+        print("Turning left at angle: " + str(degree) + " degrees")
             
         self.vel_controller.set_move_cmd(0.0, turn_velocity)
         turn_time = abs(angle / turn_velocity)
@@ -39,6 +38,19 @@ class action_client(object):
             self.vel_controller.publish()
         self.vel_controller.stop()
 
+    def turn_right(self, degree):
+        turn_velocity = -1.3
+        angle = - (degree * pi / 180)
+        print("Turning right at angle: " + str(degree) + " degrees")
+            
+        self.vel_controller.set_move_cmd(0.0, turn_velocity)
+        turn_time = abs(angle / turn_velocity)
+
+        print("Turning for " + str(turn_time) +" seconds at " + str(turn_velocity) +" m/s")
+        loop_initial_time = rospy.get_time()
+        while rospy.get_time() < loop_initial_time + turn_time:
+            self.vel_controller.publish()
+        self.vel_controller.stop()    
     def __init__(self):
         self.action_complete = False
         rospy.init_node("obstacle_action_client")
@@ -79,8 +91,8 @@ class action_client(object):
                 if self.distance >= self.STEPS[self.step]:
                     rospy.logwarn("Traversed "+ str(self.STEPS[self.step]) + " metres, turning randomly")
                     self.client.cancel_goal()
-                    random_angle = np.random.uniform(-0.5*pi, 0.5*pi)
-                    self.turn_rads(random_angle)
+                    random_degree = np.random.uniform(0,360)
+                    self.turn_left(random_degree)
                     prempt = True
                     break
 
