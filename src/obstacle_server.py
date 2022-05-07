@@ -11,12 +11,13 @@ from com2009_msgs.msg import SearchFeedback, SearchResult, SearchAction, SearchG
 from tb3 import Tb3Move, Tb3Odometry, Tb3LaserScan
 
 # Import some other useful Python Modules
-from math import sqrt, pow
+from math import sqrt, pow, pi
 import numpy as np
 
 class SearchActionServer(object):
     feedback = SearchFeedback() 
     result = SearchResult()
+    SET_DEGREE = [45, 90, -45, -90]
 
     def __init__(self):
         self.actionserver = actionlib.SimpleActionServer("/obstacle_action_server", 
@@ -33,6 +34,32 @@ class SearchActionServer(object):
         front_arc = np.array(left_arc[::-1] + right_arc[::-1])
         self.min_distance = front_arc.min()
         self.object_angle = self.arc_angles[np.argmin(front_arc)]
+
+    def turn_left(self, degree):
+        turn_velocity = 1.3
+        angle = degree * pi / 180
+        print("Turning left at angle: " + str(degree) + " degrees")
+            
+        self.vel_controller.set_move_cmd(0.0, turn_velocity)
+        turn_time = abs(angle / turn_velocity)
+
+        print("Turning for " + str(turn_time) +" seconds at " + str(turn_velocity) +" m/s")
+        loop_initial_time = rospy.get_time()
+        while rospy.get_time() < loop_initial_time + turn_time:
+            self.vel_controller.publish()
+
+    def turn_right(self, degree):
+        turn_velocity = -1.3
+        angle = - (degree * pi / 180)
+        print("Turning right at angle: " + str(degree) + " degrees")
+            
+        self.vel_controller.set_move_cmd(0.0, turn_velocity)
+        turn_time = abs(angle / turn_velocity)
+
+        print("Turning for " + str(turn_time) +" seconds at " + str(turn_velocity) +" m/s")
+        loop_initial_time = rospy.get_time()
+        while rospy.get_time() < loop_initial_time + turn_time:
+            self.vel_controller.publish()  
     
     def action_server_launcher(self, goal: SearchGoal):
         r = rospy.Rate(10)
@@ -83,11 +110,18 @@ class SearchActionServer(object):
         # turn away when meet a collision
         print("Collision found, turning away...")
         if self.tb3_lidar.closest_object_position > 0:
-            self.vel_controller.set_move_cmd(0, 1.8)
+            random_degree = np.random.randint(0,4)
+            if random_degree >= 2:
+                self.turn_right(self.SET_DEGREE[random_degree])
+            else:
+                self.turn_left(self.SET_DEGREE[random_degree])
         else:
-            self.vel_controller.set_move_cmd(0, -1.8)
+            random_degree = np.random.randint(0,4)
+            if random_degree >= 2:
+                self.turn_right(self.SET_DEGREE[random_degree])
+            else:
+                self.turn_left(self.SET_DEGREE[random_degree])
 
-        # could be infinite turn? do max 180*?
         while self.tb3_lidar.min_distance < goal.approach_distance:
             self.vel_controller.publish()
 
