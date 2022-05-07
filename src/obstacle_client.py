@@ -69,6 +69,7 @@ class action_client(object):
         self.i = 0
         self.step = 0
 
+        
     def shutdown_ops(self):
         if not self.action_complete:
             rospy.logwarn("Received a shutdown request. Cancelling Goal...")
@@ -85,17 +86,14 @@ class action_client(object):
 
     def main(self):
         while not self.ctrl_c:
-            self.send_goal(velocity = 0.2, approach = 0.5)
+            self.send_goal(velocity = 0.26, approach = 0.5)
             prempt = False
             while self.client.get_state() < 2:
                 if self.distance >= self.STEPS[self.step]:
                     rospy.logwarn("Traversed "+ str(self.STEPS[self.step]) + " metres, turning randomly")
                     self.client.cancel_goal()
-                    random_degree = np.random.uniform(-90,90)
-                    if random_degree < 0:
-                        self.turn_right(random_degree)
-                    else:
-                        self.turn_left(random_degree)
+                    random_degree = np.random.uniform(0,75)
+                    self.turn_left(45)
                     prempt = True
                     break
 
@@ -110,23 +108,6 @@ class action_client(object):
                 result = self.client.get_result()
                 print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
                         f"at a location of {result.closest_object_angle:.3f} degrees")
-                # if an object within the 0.5 metres
-                # if result.closest_object_distance < 0.5:
-                #     print ("OBJECT-DETECTION: TURNING AWAY!")
-                #     if result.closest_object_angle < -5:
-                #         print("Turning right a little")
-                #         # turn 22.5 degrees right
-                #         self.turn_rads(0.125 * pi)
-                #     elif result.closest_object_angle < 0:
-                #         print("Turning right sharply")
-                #         # turn 45 degrees right 
-                #         self.turn_rads(0.25 * pi)
-                #     elif result.closest_object_angle < 5:
-                #         print("Turning left a little")
-                #         self.turn_rads(-0.25 * pi)
-                #     else:
-                #         print("Turning left sharply")
-                #         self.turn_rads(-0.125 * pi)
             self.vel_controller.stop()   
 
 if __name__ == '__main__':
