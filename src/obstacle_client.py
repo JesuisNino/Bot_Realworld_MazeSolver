@@ -9,20 +9,19 @@ from com2009_msgs.msg import SearchAction, SearchGoal, SearchFeedback
 from tb3 import Tb3Move, Tb3Odometry, Tb3LaserScan
 
 # Import some other useful Python Modules
-from math import sqrt, pow, pi
+from math import pi
 import numpy as np
 
 class action_client(object):
-    STEPS = [2, 1.3, 0.8, 0.4]
-   
+    
+    SET_DEGREE = [45, 90, -45, -90]
+     
     def feedback_callback(self, feedback_data: SearchFeedback):
         self.distance = feedback_data.current_distance_travelled
         if self.i < 100:
             self.i += 1
         else:
             self.i = 0
-            # print(f"FEEDBACK: Currently travelled {self.distance:.3f} m")
-
         
     def turn_left(self, degree):
         turn_velocity = 1.3
@@ -51,6 +50,7 @@ class action_client(object):
         while rospy.get_time() < loop_initial_time + turn_time:
             self.vel_controller.publish()
         self.vel_controller.stop()    
+    
     def __init__(self):
         self.action_complete = False
         rospy.init_node("obstacle_action_client")
@@ -67,7 +67,7 @@ class action_client(object):
         rospy.on_shutdown(self.shutdown_ops)
         self.distance = 0.0
         self.i = 0
-        self.step = 0
+        self.wait = 0
 
     def shutdown_ops(self):
         if not self.action_complete:
@@ -85,48 +85,30 @@ class action_client(object):
 
     def main(self):
         while not self.ctrl_c:
-            self.send_goal(velocity = 0.2, approach = 0.5)
+            self.send_goal(velocity = 0.26, approach = 0.5)
             prempt = False
             while self.client.get_state() < 2:
-                if self.distance >= self.STEPS[self.step]:
-                    rospy.logwarn("Traversed "+ str(self.STEPS[self.step]) + " metres, turning randomly")
+                if self.distance >= 2:
                     self.client.cancel_goal()
-                    random_degree = np.random.uniform(-90,90)
-                    if random_degree < 0:
-                        self.turn_right(random_degree)
+                    random_degree = np.random.randint(0,4)
+                    if random_degree >= 2:
+                        self.turn_right(self.SET_DEGREE[random_degree])
                     else:
-                        self.turn_left(random_degree)
+                        self.turn_left(self.SET_DEGREE[random_degree])
                     prempt = True
                     break
 
                 self.rate.sleep()
             
             self.action_complete = True
-            if prempt:
-                self.step += 1
-                if self.step == 4:
-                    self.step = 0
+            if prempt and self.wait < 5:
+                self.wait += 1
             else:
+                self.wait = 0
                 result = self.client.get_result()
                 print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
                         f"at a location of {result.closest_object_angle:.3f} degrees")
-                # if an object within the 0.5 metres
-                # if result.closest_object_distance < 0.5:
-                #     print ("OBJECT-DETECTION: TURNING AWAY!")
-                #     if result.closest_object_angle < -5:
-                #         print("Turning right a little")
-                #         # turn 22.5 degrees right
-                #         self.turn_rads(0.125 * pi)
-                #     elif result.closest_object_angle < 0:
-                #         print("Turning right sharply")
-                #         # turn 45 degrees right 
-                #         self.turn_rads(0.25 * pi)
-                #     elif result.closest_object_angle < 5:
-                #         print("Turning left a little")
-                #         self.turn_rads(-0.25 * pi)
-                #     else:
-                #         print("Turning left sharply")
-                #         self.turn_rads(-0.125 * pi)
+
             self.vel_controller.stop()   
 
 if __name__ == '__main__':
