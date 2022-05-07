@@ -106,3 +106,4 @@ if __name__ == '__main__':
     rospy.init_node("obstacle_action_server")
     SearchActionServer()
     rospy.spin()
+    #
