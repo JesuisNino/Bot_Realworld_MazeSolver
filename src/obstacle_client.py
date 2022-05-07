@@ -83,7 +83,7 @@ class action_client(object):
         
         # send the goal to the action server:
         self.client.send_goal(self.goal, feedback_cb=self.feedback_callback)
-
+#
     def main(self):
         while not self.ctrl_c:
             self.send_goal(velocity = 0.26, approach = 0.5)
