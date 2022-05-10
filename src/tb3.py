@@ -8,6 +8,7 @@ from tf.transformations import euler_from_quaternion
 from math import degrees
 import numpy as np
 
+
 class Tb3Move(object):
     def __init__(self):
         self.publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -48,15 +49,25 @@ class Tb3Odometry(object):
 
 class Tb3LaserScan(object):
     def laserscan_cb(self, scan_data):
-        left_arc = scan_data.ranges[0:21]
-        right_arc = scan_data.ranges[-20:]
+        left_arc = scan_data.ranges[0:6]
+        right_arc = scan_data.ranges[-5:]
         front_arc = np.array(left_arc[::-1] + right_arc[::-1])
+
+        left_arc1 = scan_data.ranges[15:60]
+        left_arc = np.array(left_arc1[::-1])
+        
+        
         
         self.min_distance = front_arc.min()
-        arc_angles = np.arange(-20, 21)
+        self.min_left = left_arc.min()
+
+        arc_angles = np.arange(-5, 6)
         self.closest_object_position = arc_angles[np.argmin(front_arc)]
 
+       
     def __init__(self):
-        self.min_distance = 0.0
+        
+        self.min_distance = 0
+        self.min_left = 0
         self.closest_object_position = 0.0 # degrees
         self.subscriber = rospy.Subscriber('/scan', LaserScan, self.laserscan_cb) 
