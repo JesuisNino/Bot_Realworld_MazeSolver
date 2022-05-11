@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Task 1 program to move the robot in the shape of an eight
+# Task 3 program to move the robot to the end point through a maze
 
 from os import stat
 from this import d
@@ -105,7 +105,6 @@ class MoveMaze:
     
     def main_loop(self):
         
-
         while not self.ctrl_c:
             if self.startup:
                 self.vel = Twist()
@@ -120,8 +119,7 @@ class MoveMaze:
                     self.vel.angular.z = 0.0
                     self.vel.linear.x = 0.0
                     self.near_wall = 1
-                
-            
+                       
             else:
                  #When the distance from the front is greater than 0.4
                 if self.tb3_lidar.min_distance > 0.4: 
