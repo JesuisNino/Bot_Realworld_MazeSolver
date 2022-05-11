@@ -69,7 +69,6 @@ class action_client(object):
         self.i = 0
         self.wait = 0
 
-        
     def shutdown_ops(self):
         if not self.action_complete:
             rospy.logwarn("Received a shutdown request. Cancelling Goal...")
@@ -83,7 +82,7 @@ class action_client(object):
         
         # send the goal to the action server:
         self.client.send_goal(self.goal, feedback_cb=self.feedback_callback)
-#
+
     def main(self):
         while not self.ctrl_c:
             self.send_goal(velocity = 0.26, approach = 0.5)
@@ -109,6 +108,7 @@ class action_client(object):
                 result = self.client.get_result()
                 print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
                         f"at a location of {result.closest_object_angle:.3f} degrees")
+
             self.vel_controller.stop()   
 
 if __name__ == '__main__':
