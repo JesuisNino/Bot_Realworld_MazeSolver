@@ -106,8 +106,9 @@ class action_client(object):
             else:
                 self.wait = 0
                 result = self.client.get_result()
-                print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
-                        f"at a location of {result.closest_object_angle:.3f} degrees")
+                if result.closest_object_distance is not None:
+                    print(f"RESULT: closest object {result.closest_object_distance:.3f} m away "
+                            f"at a location of {result.closest_object_angle:.3f} degrees")
 
             self.vel_controller.stop()   
 
