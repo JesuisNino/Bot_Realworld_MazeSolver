@@ -27,6 +27,7 @@ class SearchActionServer(object):
         self.vel_controller = Tb3Move()
         self.tb3_odom = Tb3Odometry()
         self.tb3_lidar = Tb3LaserScan()
+        self.distance = 0.0 #MIGHT NEED TO BE REMOVED
     
     def scan_callback(self, scan_data):
         left_arc = scan_data.ranges[0:21]
@@ -122,10 +123,13 @@ class SearchActionServer(object):
             else:
                 self.turn_left(self.SET_DEGREE[random_degree])
 
-        while self.tb3_lidar.min_distance < goal.approach_distance:
-            self.vel_controller.publish()
-
-        self.vel_controller.stop()
+        #while self.tb3_lidar.min_distance < goal.approach_distance:
+        #    self.vel_controller.publish()
+        #    self.vel_controller.stop()
+        #    self.distance = sqrt(pow(self.posx0 - self.tb3_odom.posx, 2) + pow(self.posy0 - self.tb3_odom.posy, 2))
+            # populate the feedback message and publish it:
+        #    self.feedback.current_distance_travelled = self.distance
+        #    self.actionserver.publish_feedback(self.feedback)
 
         if success:
             rospy.loginfo("approach completed sucessfully.")
