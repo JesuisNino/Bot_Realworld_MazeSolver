@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-#-*- coding: utf-8 -*-
 
-# standard library
 import numpy as np
 import cv2
-# from pathlib import Path
+
 import rospkg
 import roslaunch
-# ros includes
+
 import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError

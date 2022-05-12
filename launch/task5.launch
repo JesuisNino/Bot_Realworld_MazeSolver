@@ -1,6 +1,6 @@
 <launch>
     <arg name="open_rviz" default="true"/>
-    <arg name="target_colour" default="Red"/> 
+    <arg name="target_colour" default="Blue"/> 
     <!-- Turtlebot3 Navigation -->
     <include file="$(find team47)/launch/nav/move_base.launch">
     </include>
