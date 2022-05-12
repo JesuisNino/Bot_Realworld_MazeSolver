@@ -1,14 +1,23 @@
 <launch>
-    
+    <arg name="open_rviz" default="true"/>
+    <arg name="target_colour" default="Red"/> 
     <!-- Turtlebot3 Navigation -->
-    <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+    <include file="$(find team47)/launch/nav/move_base.launch">
     </include>
 
     <!-- Turtlebot3 SLAM -->
-    <include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch">
+    <include file="$(find team47)/launch/slam/turtlebot3_slam.launch">
     </include>
 
     <!-- Node for autonomous mapping -->
     <node name="explore" pkg="team47" type="task5_server.py" output="screen"/>
     
+    <!-- Node for colour detect -->
+    <param name="target_colour"  value="$(arg target_colour)"/>    
+    <node name="colot" pkg="team47" type="colour.py" output="screen"/>
+
+    <!-- rviz -->
+    <group if="$(arg open_rviz)"> 
+      <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find team47)/rviz/explore.rviz"/>
+    </group>    
 </launch>
