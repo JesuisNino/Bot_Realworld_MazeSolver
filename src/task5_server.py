@@ -22,7 +22,6 @@ class Explore:
         """
         # Initialize rate:
         self.rate = rospy.Rate(1)
-
         # Simple Action Client:
         self.move_base = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(5.0))
@@ -44,21 +43,28 @@ class Explore:
         Subscribes to /map to get the OccupancyGrid of the map.
         """
         valid = False
-
+        self.map = data
+        map_size = 0
         while valid is False:
             map_size = randrange(len(data.data))
-            self.map = data.data[map_size]
+            map_cell_value = data.data[map_size]
 
             edges = self.check_neighbors(data, map_size)
-            if self.map != -1 and self.map <= 0.2 and edges is True:
+            if map_cell_value != -1 and map_cell_value <= 0.20 and edges is True:
                 valid = True
-            
-        row = map_size / 384
-        col = map_size % 384
 
-        self.x = col * 0.05 - 10  # column * resolution + origin_x
-        self.y = row * 0.05 - 10  # row * resolution + origin_x
+        if map_size == 0:
+          return 
         
+        # print(self.map.info.width, self.map.info.resolution, map_size)
+        # print("origin:",self.map.info.origin.position.x, self.map.info.origin.position.y)        
+        row = map_size / self.map.info.width
+        col = map_size % self.map.info.width
+
+        self.x = col * self.map.info.resolution + self.map.info.origin.position.x  # column * resolution + origin_x
+        self.y = row * self.map.info.resolution + self.map.info.origin.position.y  # row * resolution + origin_x
+        # print(row, col, self.x, self.y)
+
         if self.completion % 2 == 0:
             self.completion += 1
             # Start the robot moving toward the goal
@@ -110,7 +116,7 @@ class Explore:
 
         for x in range(-3, 4):
             for y in range(-3, 4):
-                row = x * 384 + y
+                row = x * self.map.info.width + y
                 try:
                     if data.data[map_size + row] == -1:
                         unknowns += 1
