@@ -48,8 +48,7 @@ class image_converter:
     self.LoopRun()
 
   def LoopRun(self):
-      """ LoopRun.
-      """
+      #Main Loop.
       rospy.loginfo("LoopRun:")
       while not rospy.is_shutdown():
         if self.enable_save_map :
@@ -63,9 +62,9 @@ class image_converter:
         rospy.sleep(0.1)
 
   def map_callback(self, data):
-      """ Callback function for map subscriber.
-      Subscribes to /map to get the OccupancyGrid of the map.
-      """
+      # Callback function for map subscriber.
+      # Subscribes to /map to get the OccupancyGrid of the map.
+
       cur_time = rospy.Time.now()
       time_diff = (cur_time - self.last_update_map_time).to_sec()
       if time_diff > 30.0 :

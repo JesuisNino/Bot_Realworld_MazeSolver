@@ -18,8 +18,6 @@ import time
 class Explore:
 
     def __init__(self):
-        """ Initialize environment
-        """
         # Initialize rate:
         self.rate = rospy.Rate(1)
         # Simple Action Client:
@@ -39,9 +37,8 @@ class Explore:
 
 
     def map_callback(self, data):
-        """ Callback function for map subscriber.
-        Subscribes to /map to get the OccupancyGrid of the map.
-        """
+        #Callback function for map subscriber.
+        #Subscribes to /map to get the OccupancyGrid of the map.
         valid = False
         self.map = data
         map_size = 0
@@ -72,8 +69,7 @@ class Explore:
     
 
     def set_goal(self):
-        """ Set goal position for move_base.
-        """
+        #Set goal position for move_base.
         rospy.logdebug("Setting goal")
 
         # Create goal:
@@ -90,9 +86,9 @@ class Explore:
 
 
     def goal_status(self, status, result):
-        """ Check the status of a goal - goal reached, aborted,
-        or rejected.
-        """
+        # Check the status of a goal - goal reached, aborted,
+        # or rejected.
+
         self.completion += 1
 
         # Goal reached
@@ -109,8 +105,7 @@ class Explore:
 
 
     def check_neighbors(self, data, map_size):
-        """ Checks neighbors for random points on the map.
-        """
+        # Checks neighbors for random points on the map.
         unknowns = 0
         obstacles = 0
 
@@ -131,7 +126,6 @@ class Explore:
 
 
 def main():
-    """ The main() function """
     rospy.init_node('explore', log_level=rospy.DEBUG)
     Explore()
     rospy.spin()
