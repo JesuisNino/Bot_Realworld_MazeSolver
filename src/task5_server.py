@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
-"""
- The explore node causes the robot to explore the environment autonomously while mapping the world
- SUBSCRIBERS:
-  sub_map (nav_msgs/OccupancyGrid) - represents a 2-D grid map, in which each cell represents the probability of occupancy.
-"""
 
 import rospy
 import actionlib
 import numpy as np
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseFeedback, MoveBaseGoal, MoveBaseAction
-from nav_msgs.msg import OccupancyGrid
+from nav_msgs.msg import OccupancyGrid, Path
 from geometry_msgs.msg import Pose, Point, Quaternion
 from random import randrange
 import time
@@ -32,9 +27,12 @@ class Explore:
         # Initialize subscribers:
         self.map = OccupancyGrid()
         self.sub_map = rospy.Subscriber('/map', OccupancyGrid, self.map_callback)
-        self.count = 0
+        self.loc_path_sub = rospy.Subscriber('/move_base/DWAPlannerROS/local_plan', Path, self.local_path_callback)
+        self.local_path_callback = rospy.Time.now()
         time.sleep(8)
 
+    def local_path_callback(self, data):
+        self.last_loc_path_time = rospy.Time.now()
 
     def map_callback(self, data):
         #Callback function for map subscriber.
@@ -52,9 +50,7 @@ class Explore:
 
         if map_size == 0:
           return 
-        
-        # print(self.map.info.width, self.map.info.resolution, map_size)
-        # print("origin:",self.map.info.origin.position.x, self.map.info.origin.position.y)        
+          
         row = map_size / self.map.info.width
         col = map_size % self.map.info.width
 
@@ -62,10 +58,12 @@ class Explore:
         self.y = row * self.map.info.resolution + self.map.info.origin.position.y  # row * resolution + origin_x
         # print(row, col, self.x, self.y)
 
-        if self.completion % 2 == 0:
+        if self.completion % 2 == 0 or (rospy.Time.now() - self.last_loc_path_time).to_sec() > 10.0:
+            self.last_loc_path_time = rospy.Time.now()
             self.completion += 1
             # Start the robot moving toward the goal
             self.set_goal()
+            print("set_goal:", self.x, self.y, "loc_time", (rospy.Time.now() - self.last_loc_path_time).to_sec())
     
 
     def set_goal(self):
@@ -86,8 +84,7 @@ class Explore:
 
 
     def goal_status(self, status, result):
-        # Check the status of a goal - goal reached, aborted,
-        # or rejected.
+        # Check the status of a goal - goal reached, aborted, or rejected.
 
         self.completion += 1
 
