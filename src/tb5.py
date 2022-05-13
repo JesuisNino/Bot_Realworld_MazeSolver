@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from turtle import right
 import rospy
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -7,7 +8,6 @@ from sensor_msgs.msg import LaserScan
 from tf.transformations import euler_from_quaternion
 from math import degrees
 import numpy as np
-
 
 class Tb3Move(object):
     def __init__(self):
@@ -49,30 +49,34 @@ class Tb3Odometry(object):
 
 class Tb3LaserScan(object):
     def laserscan_cb(self, scan_data):
-        left_arc = scan_data.ranges[0:6]
-        right_arc = scan_data.ranges[-5:]
+        left_arc = scan_data.ranges[0:16]
+        right_arc = scan_data.ranges[-15:]
         front_arc = np.array(left_arc[::-1] + right_arc[::-1])
+        
+        right = np.array(scan_data.ranges[-45:-91])
+        left = np.array(scan_data.ranges[46:91])
+        back = np.array(scan_data.ranges[91:271])
 
-        left_arc1 = scan_data.ranges[15:50]
-        left_arc = np.array(left_arc1[::-1])
-
-        right_arc1 = scan_data.ranges[310:345]
-        right_arc = np.array(right_arc1[::-1])
-        
-        
-        
         self.min_distance = front_arc.min()
-        self.min_left = left_arc.min()
-        self.min_right = right_arc.min()
+        self.right_min = right.min()
+        self.left_min = left.min()
+        self.back_min = back.min()
 
-        arc_angles = np.arange(-5, 6)
+
+        arc_angles = np.arange(-15, 16)
         self.closest_object_position = arc_angles[np.argmin(front_arc)]
 
-       
+        right_angles = np.arange(-45, -91)
+        self.right_object_position = right_angles[np.argmin(right)]
+
+        left_angles = np.arange(46, 91)
+        self.left_object_position = left_angles[np.argmin(left)]
+
+        back_angles = np.arange(91, 271)
+        self.back_object_position = back_angles[np.argmin(back)]
+
+
     def __init__(self):
-        
-        self.min_distance = 0
-        self.min_left = 0
-        self.min_right = 0
+        self.min_distance = 0.0
         self.closest_object_position = 0.0 # degrees
-        self.subscriber = rospy.Subscriber('/scan', LaserScan, self.laserscan_cb) 
+        self.subscriber = rospy.Subscriber('/scan', LaserScan, self.laserscan_cb)
