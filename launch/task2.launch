@@ -1,4 +1,4 @@
 <launch>
-  <node pkg="team47" type="obstacle_server.py" name="obstacle_action_server"  output="screen" />
-  <node pkg="team47" type="obstacle_client.py" name="obstacle_action_client"  output="screen" />
+  <node pkg="team47" type="task2_client.py" name="obstacle_action_server"  output="screen" />
+  <node pkg="team47" type="task2_server.py" name="obstacle_action_client"  output="screen" />
 </launch>
