@@ -61,40 +61,19 @@ class SearchActionServer(object):
         
         
         while self.move==1:
-            #if self.tb3_lidar.min_distance > goal.approach_distance and self.tb3_lidar.min_left>0.33 and self.tb3_lidar.min_right>0.33:
-           #    self.vel_controller.set_move_cmd(goal.fwd_velocity, 0.0)
-            #   self.vel_controller.publish()
-           # elif self.tb3_lidar.min_left>self.tb3_lidar.min_right:
-             #  self.vel_controller.set_move_cmd(0, 1.5)
-             #  self.vel_controller.publish()
-           # else:
-           #    self.vel_controller.set_move_cmd(0, -1.5)
-               #self.vel_controller.publish()
-
-            if self.tb3_lidar.min_distance > goal.approach_distance and self.tb3_lidar.min_left>0.33 and self.tb3_lidar.min_right>0.33:
+            if self.tb3_lidar.min_distance > goal.approach_distance and self.tb3_lidar.min_left>0.31 and self.tb3_lidar.min_right>0.31:
                self.vel_controller.set_move_cmd(goal.fwd_velocity, 0.0)
                self.vel_controller.publish()
-               print('distance:',self.tb3_lidar.min_distance,'target distance:',goal.approach_distance)
-
+            elif self.tb3_lidar.min_left>self.tb3_lidar.min_right:
+               self.vel_controller.set_move_cmd(0, 1.5)
+               self.vel_controller.publish()
             else:
-                print("haha")
-                self.vel_controller.set_move_cmd(0.0, 0.0)
-                self.vel_controller.publish()
-                print('distance:',self.tb3_lidar.min_distance,'target distance:',goal.approach_distance)
-            
-            # else:
-            #     print("haha")
-            #     arc_time=self.tb3_lidar.object_angle1/1.5
-            #     time1 = rospy.get_time()
-            #     self.vel_controller.set_move_cmd(0.0, 1.5)
-            #     while rospy.get_time-time1<arc_time:
-            #         self.vel_controller.set_move_cmd(0.0, 1.5)
-                    
-            #         self.vel_controller.publish()
-                
+               self.vel_controller.set_move_cmd(0, -1.5)
+               self.vel_controller.publish()
 
             
-
+            
+            
             
 
            # check if there has been a request to cancel the action mid-way through:
