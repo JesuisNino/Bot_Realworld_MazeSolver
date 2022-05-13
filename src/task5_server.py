@@ -58,7 +58,7 @@ class Explore:
         self.y = row * self.map.info.resolution + self.map.info.origin.position.y  # row * resolution + origin_x
         # print(row, col, self.x, self.y)
 
-        if self.completion % 2 == 0 or (rospy.Time.now() - self.last_loc_path_time).to_sec() > 5.0:
+        if self.completion % 2 == 0 or (rospy.Time.now() - self.last_loc_path_time).to_sec() > 3.0:
             self.last_loc_path_time = rospy.Time.now()
             self.completion += 1
             # Start the robot moving toward the goal
