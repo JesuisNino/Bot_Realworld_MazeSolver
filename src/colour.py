@@ -15,10 +15,8 @@ from nav_msgs.msg import OccupancyGrid
 BOX_colourS = {
     "red": {"colour_lower": np.array([0, 185, 100]), "colour_upper": np.array([10, 255, 255])},
     "yellow": {"colour_lower": np.array([26, 43, 46]), "colour_upper": np.array([34, 255, 255])},
-    "green": {"colour_lower": np.array([25, 150, 100]), "colour_upper": np.array([70, 255, 255])},
-    "turquoise": {"colour_lower": np.array([75, 150, 100]), "colour_upper": np.array([100, 255, 255])},    
-    "blue": {"colour_lower": np.array([115, 224, 100]), "colour_upper": np.array([130, 255, 255])},    
-    "purple": {"colour_lower": np.array([125, 43, 46]), "colour_upper": np.array([155, 255, 255])},
+    "green": {"colour_lower": np.array([25, 150, 100]), "colour_upper": np.array([70, 255, 255])},   
+    "blue": {"colour_lower": np.array([115, 224, 100]), "colour_upper": np.array([130, 255, 255])}
 }
 
 ## process rgbd image by cv to find the target object
