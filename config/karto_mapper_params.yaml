@@ -1,3 +1,6 @@
+# turtlebot3_slam source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+
 # General Parameters
 use_scan_matching: true
 use_scan_barycenter: true

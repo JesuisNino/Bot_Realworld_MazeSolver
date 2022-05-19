@@ -1,3 +1,8 @@
+# turtlebot3_slam source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+# In order to make the gmap more suitable for our team assignment
+# Changed some params here
+
 map_update_interval: 2.0
 maxUrange: 3.0
 sigma: 0.05

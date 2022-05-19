@@ -12,6 +12,10 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+
+-- turtlebot3_slam source code from the official github
+-- https://github.com/ROBOTIS-GIT/turtlebot3
+
 include "map_builder.lua"
 include "trajectory_builder.lua"
 

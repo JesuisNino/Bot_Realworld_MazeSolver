@@ -14,6 +14,11 @@
   limitations under the License.
 -->
 
+<!-- 
+  turtlebot3_slam source code from the official github
+  https://github.com/ROBOTIS-GIT/turtlebot3
+ -->
+
 <launch>
   <!-- Arguments -->
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>

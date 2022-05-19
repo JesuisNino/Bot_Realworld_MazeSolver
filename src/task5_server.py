@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Imported turtlebot3_navigation turtlebot3_slam source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+
 import rospy
 import actionlib
 import numpy as np

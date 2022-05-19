@@ -1,3 +1,6 @@
+# turtlebot3_navigation source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+
 DWAPlannerROS:
 
 # Robot Configuration Parameters

@@ -1,3 +1,6 @@
+# turtlebot3_slam source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+
 transform_tolerance: 0.5
 update_frequency: 5.0
 publish_frequency: 5.0

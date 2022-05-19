@@ -1,3 +1,7 @@
+# turtlebot3_navigation source code from the official github
+# https://github.com/ROBOTIS-GIT/turtlebot3
+# changed some params here to make the bot think himself 'smaller'
+
 obstacle_range: 3.0
 raytrace_range: 3.5
 
